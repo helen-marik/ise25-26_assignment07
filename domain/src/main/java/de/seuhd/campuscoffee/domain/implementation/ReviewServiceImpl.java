@@ -58,12 +58,14 @@ public class ReviewServiceImpl extends CrudServiceImpl<Review, Long> implements 
         // Validate author exists
         User author = userDataService.getById(review.author().getId());
 
-        // If creating a new review (review-id is null), check if user already has a review for this POS
+        // Check if user already has a review for this POS 
+        List<Review> existingReviews = reviewDataService.filter(pos, author);
+        if (!existingReviews.isEmpty()) {
+            throw new ValidationException("Users cannot submit more than one review per POS.");
+        }
+
+        // If creating a new review (review-id is null), set initial values
         if (review.getId() == null) {
-            List<Review> existingReviews = reviewDataService.filter(pos, author);
-            if (!existingReviews.isEmpty()) {
-                throw new ValidationException("Users cannot submit more than one review per POS.");
-            }
             // Set initial values for new reviews
             review = review.toBuilder()
                 .approvalCount(0)
@@ -103,7 +105,7 @@ public class ReviewServiceImpl extends CrudServiceImpl<Review, Long> implements 
                 .build();
 
 
-        // update approval status to determine if the review now reaches the approval quorum
+        // update approval status to determine if the rehatview now reaches the approval quorum
         Review finalReview = updateApprovalStatus(updatedReview);
 
         return reviewDataService.upsert(finalReview);

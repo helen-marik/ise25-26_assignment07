@@ -1,7 +1,6 @@
 package de.seuhd.campuscoffee.api.controller;
 
 import de.seuhd.campuscoffee.api.dtos.ReviewDto;
-import de.seuhd.campuscoffee.api.dtos.UserDto;
 import de.seuhd.campuscoffee.api.mapper.DtoMapper;
 import de.seuhd.campuscoffee.api.mapper.ReviewDtoMapper;
 import de.seuhd.campuscoffee.api.openapi.CrudOperation;

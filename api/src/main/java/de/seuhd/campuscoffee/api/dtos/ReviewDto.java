@@ -17,6 +17,8 @@ public record ReviewDto (
     @Nullable LocalDateTime createdAt,
     @Nullable LocalDateTime updatedAt,
 
+    @Nullable Integer approvalCount,
+
     @NotNull
     @NonNull Long posId,
 

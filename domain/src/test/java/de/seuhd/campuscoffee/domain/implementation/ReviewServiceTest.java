@@ -1,7 +1,29 @@
 package de.seuhd.campuscoffee.domain.implementation;
 
+import de.seuhd.campuscoffee.domain.configuration.ApprovalConfiguration;
+import de.seuhd.campuscoffee.domain.exceptions.NotFoundException;
+import de.seuhd.campuscoffee.domain.exceptions.ValidationException;
+import de.seuhd.campuscoffee.domain.model.objects.Pos;
+import de.seuhd.campuscoffee.domain.model.objects.Review;
+import de.seuhd.campuscoffee.domain.model.objects.User;
+import de.seuhd.campuscoffee.domain.ports.data.PosDataService;
+import de.seuhd.campuscoffee.domain.ports.data.ReviewDataService;
+import de.seuhd.campuscoffee.domain.ports.data.UserDataService;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
+import java.util.Objects;
+
+import de.seuhd.campuscoffee.domain.tests.TestFixtures;
+import static de.seuhd.campuscoffee.domain.tests.TestFixtures.getApprovalConfiguration;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit and integration tests for the operations related to reviews.
@@ -114,8 +136,10 @@ public class ReviewServiceTest {
         Pos pos = review.pos();
         User author = review.author();
         assertNotNull(pos.getId());
+        assertNotNull(author.getId());
 
         when(posDataService.getById(pos.getId())).thenReturn(pos);
+        when(userDataService.getById(author.getId())).thenReturn(author);
         when(reviewDataService.filter(pos, author)).thenReturn(List.of(review));
 
         // when, then
